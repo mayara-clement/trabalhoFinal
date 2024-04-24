@@ -1,72 +1,96 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 const Forms = () => {
   const [formData, setFormData] = useState({
-    dataEmailRecebido: '',
     protocolo: '',
+    dataEmailRecebido: 0, 
+    protocoloPrimaria: 0, 
     statusImplantacao: '',
     migracaoOuVenda: '',
-    codigoCliente: '',
+    codigoCliente: 0, 
     cnpj: '',
     razaoSocial: '',
     comercial: '',
-    nomeResponsavel: '',
-    telefone: '',
-    clienteContatado: '',
-    planilhasImportadas: '',
-    cartoesLoteGerados: '',
-    inclusao: '',
-    reemissaoAlteracao: '',
-    cancelamento: '',
-    dataEntrega: '',
-    dataFinalizacaoProcesso: '',
-    prazoProcesso: '',
+    responsavel: '',
+    telefone: 0, 
+    clienteContatado: 0, 
+    planilhasImportadas: 0, 
+    cartoesLoteGerados: 0, 
+    dataEntrega: 0, 
+    dataFinalizacaoProcesso: 0, 
+    inclusao: 0, 
+    reemissaoAlteracao: 0, 
+    cancelamento: 0,
+    prazoProcesso: 0,
     dentroDoPrazo: '',
     implantado: '',
     observacao: '',
     motivoNaoMigracao: ''
-  })
+  });
+  
 
-  const handleChange = e => {
-    const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value
-    })
-  }
 
-  const handleSubmit = e => {
-    e.preventDefault()
-    // Aqui você pode enviar os dados para o banco de dados MySQL
-    console.log(formData)
-    // Resetar o formulário após enviar os dados
-    setFormData({
-      dataEmailRecebido: '',
-      protocolo: '',
-      statusImplantacao: '',
-      migracaoOuVenda: '',
-      codigoCliente: '',
-      cnpj: '',
-      razaoSocial: '',
-      comercial: '',
-      nomeResponsavel: '',
-      telefone: '',
-      clienteContatado: '',
-      planilhasImportadas: '',
-      cartoesLoteGerados: '',
-      inclusao: '',
-      reemissaoAlteracao: '',
-      cancelamento: '',
-      dataEntrega: '',
-      dataFinalizacaoProcesso: '',
-      prazoProcesso: '',
-      dentroDoPrazo: '',
-      implantado: '',
-      observacao: '',
-      motivoNaoMigracao: ''
-    })
-  }
+  
+    const handleChange = (e: { target: { name: any; value: any; }; }) => {
+      const { name, value } = e.target;
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    };
+  
+    const handleSubmit = (e: { preventDefault: () => void; }) => {
+      e.preventDefault();
+  
+      fetch('/api/inserir-dados', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Erro ao enviar os dados.');
+      })
+      .then(data => {
+        console.log(data);
+        setFormData({
+          protocolo: '',
+          dataEmailRecebido: 0,
+          protocoloPrimaria: 0,
+          statusImplantacao: '',
+          migracaoOuVenda: '',
+          codigoCliente: 0,
+          cnpj: '',
+          razaoSocial: '',
+          comercial: '',
+          responsavel: '',
+          telefone: 0,
+          clienteContatado: 0,
+          planilhasImportadas: 0,
+          cartoesLoteGerados: 0,
+          dataEntrega: 0, 
+          dataFinalizacaoProcesso: 0,
+          inclusao: 0,
+          reemissaoAlteracao: 0,
+          cancelamento: 0,
+          prazoProcesso: 0,
+          dentroDoPrazo: '',
+          implantado: '', 
+          observacao: '', 
+          motivoNaoMigracao: ''
+        });
+      })
+      .catch(error => {
+        console.error('Houve um problema com a solicitação fetch:', error);
+      });
+    };
+
+
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-4 mb-10">
@@ -154,7 +178,7 @@ const Forms = () => {
         <input
           type="text"
           name="nomeResponsavel"
-          value={formData.nomeResponsavel}
+          value={formData.responsavel}
           onChange={handleChange}
           className="border border-gray-300 rounded-md px-3 py-2 w-full"
           placeholder="Nome responsável"
