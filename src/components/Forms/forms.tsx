@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react'
+import axios from 'axios';
 
 const Forms = () => {
   const [formData, setFormData] = useState({
@@ -38,7 +39,12 @@ const Forms = () => {
 
   const handleSubmit = e => {
     e.preventDefault()
-    // Aqui você pode enviar os dados para o banco de dados MySQL
+     try {
+      const response = axios.post('inserir.php', console.log(formData));
+      console.log(response.data);
+    } catch (error) {
+      console.error('Erro ao enviar os dados:', error);
+    }
     console.log(formData)
     // Resetar o formulário após enviar os dados
     setFormData({
